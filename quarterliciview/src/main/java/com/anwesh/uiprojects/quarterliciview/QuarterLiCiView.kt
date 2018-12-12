@@ -212,4 +212,12 @@ class QuarterLiCiView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+        fun create(activity: Activity) : QuarterLiCiView {
+            val view : QuarterLiCiView = QuarterLiCiView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
