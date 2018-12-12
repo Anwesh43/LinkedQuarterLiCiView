@@ -189,4 +189,26 @@ class QuarterLiCiView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : QuarterLiCiView) {
+
+        private val animator : Animator = Animator(view)
+        private val qlc : QuarterLiCi = QuarterLiCi(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#BDBDBD"))
+            qlc.draw(canvas, paint)
+            animator.animate {
+                qlc.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            qlc.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
