@@ -21,6 +21,7 @@ val color : Int = Color.parseColor("#0D47A1")
 val strokeFactor : Int = 90
 val sizeFactor : Float = 3f
 val qcdeg : Float = 60f
+val DELAY : Long = 25
 
 fun Int.getInverse() : Float = 1f / this
 
@@ -105,7 +106,7 @@ class QuarterLiCiView(ctx : Context) : View(ctx) {
             if (animated) {
                 cb()
                 try {
-                    Thread.sleep(50)
+                    Thread.sleep(DELAY)
                     view.invalidate()
                 } catch(ex : Exception) {
 
