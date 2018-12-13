@@ -33,6 +33,33 @@ fun Float.mirrorValue(a : Int, b : Int) : Float = (1 - scaleFactor()) * a.getInv
 
 fun Float.updateScale(dir : Float, a : Int, b : Int) : Float = mirrorValue(a, b) * scGap * dir
 
+fun Canvas.drawSquareWithDiag(y : Float, size : Float, scale : Float, paint : Paint) {
+    val sc1 : Float = scale.divideScale(0, 2)
+    val sc2 : Float = scale.divideScale(1, 2)
+    val lines : Int = 4
+    val diags : Int = 2
+    for (i in 0..1) {
+        save()
+        translate(0f, y * (1 - 2 * i))
+        for (j in 0..lines) {
+            val sc : Float = sc1.divideScale(j, lines)
+            save()
+            rotate(90f * j)
+            drawLine(size, -size, size, -size + 2 * size * sc, paint)
+            restore()
+        }
+        for (j in 0..diags) {
+            val sc : Float = sc2.divideScale(j, diags)
+            save()
+            translate(0f, 0f)
+            rotate(90f * j)
+            drawLine(-size * sc, size * sc, size * sc, -size * sc, paint)
+            restore()
+        }
+        restore()
+    }
+}
+
 fun Canvas.drawQLCNode(i : Int, scale : Float, paint : Paint) {
     val w : Float = width.toFloat()
     val h : Float = height.toFloat()
@@ -48,6 +75,7 @@ fun Canvas.drawQLCNode(i : Int, scale : Float, paint : Paint) {
     val startDeg = (90f - qcdeg) / 2
     save()
     translate(gap * (i + 1), h/2)
+    drawSquareWithDiag(0.3f * h, size, scale, paint)
     rotate(90f * sc2)
     for (j in 0..(lines - 1)) {
         save()
