@@ -94,6 +94,11 @@ class QuarterLiCiView(ctx : Context) : View(ctx) {
 
     private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val renderer : Renderer = Renderer(this)
+    var onCompleteListener : OnAnimationCompleteListener? = null
+
+    fun addOnCompleteListener(onComplete: (Int) -> Unit, onReset: (Int) -> Unit) {
+        onCompleteListener = OnAnimationCompleteListener(onComplete, onReset)
+    }
 
     override fun onDraw(canvas : Canvas) {
         renderer.render(canvas, paint)
@@ -234,6 +239,10 @@ class QuarterLiCiView(ctx : Context) : View(ctx) {
             animator.animate {
                 qlc.update {i, scl ->
                     animator.stop()
+                    when (scl) {
+                        1f -> view.onCompleteListener?.onComplete?.invoke(i)
+                        0f -> view.onCompleteListener?.onReset?.invoke(i)
+                    }
                 }
             }
         }
@@ -244,6 +253,8 @@ class QuarterLiCiView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    data class OnAnimationCompleteListener(var onComplete : (Int) -> Unit, var onReset : (Int) -> Unit)
 
     companion object {
         fun create(activity: Activity) : QuarterLiCiView {
